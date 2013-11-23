@@ -65,7 +65,7 @@ class YoutubeSound
     this.duration = this.durationEstimate = this.player.getDuration() * 1000
     if this._autoPlay
       this.play()
-    this.setVolume this.options.volume if this.options.volume
+    this.setVolume this.options.volume if this.options.volume?
     this._startLoadingPoller()
 
   onStateChange: ->
