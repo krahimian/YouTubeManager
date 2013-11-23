@@ -15,6 +15,7 @@ class YoutubeSound
 
     this.buffered = undefined
     this.bytesLoaded = undefined
+    this.bytesTotal = 1
     this.isBuffering = undefined
     this.connected = undefined
     this.duration = undefined
@@ -26,19 +27,27 @@ class YoutubeSound
     this.playState = undefined
     this.position = 0
     this.readyState = 0
+    
+    this.element = document.createElement 'div'
+    this.element.setAttribute 'id', options.id
+    this.element.setAttribute 'class', 'ym-container'
+    
+    document.body.appendChild(this.element)
 
     # we don't want to change original options
     this._autoPlay = this.options.autoPlay
 
-    this._poller = undefined
+    this._whileplaying = undefined
+    this._whileloading = undefined
     this._previousState = undefined
 
     videoId = options.youtubeVideoId or extractIdRe.exec(options.url)[1]
 
     if not videoId?
       throw new Error("cannot extract videoId from URL: #{options.url}")
-
-    this.player = new YT.Player options.playerId,
+    
+    this.videoId = videoId
+    this.player = new YT.Player options.id,
       height: options.height
       width: options.width
       videoId: videoId
@@ -56,44 +65,63 @@ class YoutubeSound
     this.duration = this.durationEstimate = this.player.getDuration() * 1000
     if this._autoPlay
       this.play()
+    this.setVolume this.options.volume if this.options.volume
+    this._startLoadingPoller()
 
   onStateChange: ->
     state = this.player.getPlayerState()
 
     if state == -1
       this.duration = this.durationEstimate = this.player.getDuration() * 1000
-      this.loaded = true
 
     if state == YT.PlayerState.PLAYING
       this.duration = this.durationEstimate = this.player.getDuration() * 1000
-      this._startPoller()
+      this._startPlayingPoller()
       this.paused = false
-      this.options.onplay() if this.options.onplay
-      this.options.onresume() if this.options.onresume and this._previousState == YT.PlayerState.PAUSED
+      this.options.onplay.apply(this) if this.options.onplay
+      this.options.onresume.apply(this) if this.options.onresume and this._previousState == YT.PlayerState.PAUSED
     else if state == YT.PlayerState.PAUSED
-      this._stopPoller()
+      this._stopPlayingPoller()
       this.paused = true
-      this.options.onpause() if this.options.onpause
+      this.options.onpause.apply(this) if this.options.onpause
     else if state == YT.PlayerState.ENDED
       this.paused = false
-      this._stopPoller()
-      this.options.onfinish() if this.options.onfinish
+      this._stopPlayingPoller()
+      this.options.onfinish.apply(this) if this.options.onfinish
 
     this._previousState = state
 
-  _startPoller: ->
-    this._poller = setInterval(
-      (=> this._updateState()),
+  _startPlayingPoller: ->
+    this._whileplaying = setInterval(
+      (=> this._updatePosition()),
       this.options.pollingInterval or 500)
 
-  _stopPoller: ->
-    return unless this._poller
-    clearInterval(this._poller)
-    this._poller = undefined
+  _stopPlayingPoller: ->
+    return unless this._whileplaying
+    clearInterval(this._whileplaying)
+    this._whileplaying = undefined
 
-  _updateState: ->
+  _updatePosition: ->
     this.position = this.player.getCurrentTime() * 1000
-    this.options.whileplaying() if this.options.whileplaying
+    this.options.whileplaying.apply(this) if this.options.whileplaying
+    
+  _startLoadingPoller: ->
+    this._whileloading = setInterval(
+      (=> this._updateLoading()),
+      this.options.pollingInterval or 500)
+  
+  _stopLoadingPoller: ->
+    return unless this._whileloading
+    clearInterval(this._whileloading)
+    this._whileloading = undefined
+  
+  _updateLoading: ->
+    this.bytesLoaded = this.player.getVideoLoadedFraction()
+    if this.bytesLoaded == 1
+      this.loaded = true
+      this.options.onload.apply(this) if this.options.onload
+      this._stopLoadingPoller()
+    this.options.whileloading.apply(this) if this.options.whileloading
 
   destruct: ->
     this.player.destroy()
@@ -135,6 +163,8 @@ class YoutubeSound
     if this.player.stopVideo?
       this.player.seekTo(0)
       this.player.stopVideo()
+      this._stopPlayingPoller()
+      this._stopLoadingPoller()
       this.position = 0
     else
       this._autoPlay = false

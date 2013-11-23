@@ -6,9 +6,9 @@
   "dependencies": {},
   "repository": {
       "type": "git",
-      "url": "git://github.com/andreypopp/youtubemanager.git"
+      "url": "git://github.com/vacay/youtubemanager.git"
   },
-  "homepage": "https://github.com/andreypopp/youtubemanager",
+  "homepage": "https://github.com/vacay/youtubemanager",
   "keywords": [
       "browser",
       "youtube",
