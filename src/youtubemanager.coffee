@@ -78,8 +78,10 @@ class YoutubeSound
       this.duration = this.durationEstimate = this.player.getDuration() * 1000
       this._startPlayingPoller()
       this.paused = false
-      this.options.onplay.apply(this) if this.options.onplay
-      this.options.onresume.apply(this) if this.options.onresume and this._previousState == YT.PlayerState.PAUSED
+      if this._previousState == YT.PlayerState.PAUSED
+        this.options.onresume.apply(this) if this.options.onresume
+      else
+        this.options.onplay.apply(this) if this.options.onplay
     else if state == YT.PlayerState.PAUSED
       this._stopPlayingPoller()
       this.paused = true
