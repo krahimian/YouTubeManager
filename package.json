@@ -1,31 +1,31 @@
 {
-  "name": "youtubemanager2",
-  "version": "0.5.0",
-  "description": "YouTube player which mimics SoundManager2 Sound object",
-  "main": "lib/youtubemanager.js",
-  "dependencies": {},
-  "devDependencies": {
-    "semver": "2.2.1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/vacay/youtubemanager.git"
-  },
-  "homepage": "https://github.com/vacay/youtubemanager",
-  "keywords": [
-    "browser",
-    "youtube",
-    "soundmanager",
-    "soundmanager2",
-    "music",
-    "video",
-    "player",
-    "sound"
-  ],
-  "author": {
-    "name": "Andrey Popp",
-    "email": "8mayday@gmail.com",
-    "url": "http://andreypopp.com"
-  },
-  "license": "MIT"
+    "name": "youtubemanager2",
+    "version": "0.5.0",
+    "description": "YouTube player which mimics SoundManager2 Sound object",
+    "main": "lib/youtubemanager.js",
+    "dependencies": {},
+    "devDependencies": {
+	"semver": "2.2.1"
+    },
+    "repository": {
+	"type": "git",
+	"url": "git://github.com/vacay/youtubemanager.git"
+    },
+    "homepage": "https://github.com/vacay/youtubemanager",
+    "keywords": [
+	"browser",
+	"youtube",
+	"soundmanager",
+	"soundmanager2",
+	"music",
+	"video",
+	"player",
+	"sound"
+    ],
+    "author": {
+	"name": "Andrey Popp",
+	"email": "8mayday@gmail.com",
+	"url": "http://andreypopp.com"
+    },
+    "license": "MIT"
 }
