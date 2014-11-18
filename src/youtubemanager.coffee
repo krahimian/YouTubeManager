@@ -233,10 +233,7 @@ youtubeManager =
 
   _injectScript: ->
     tag = document.createElement('script')
-    if window.location.host == 'localhost'
-      tag.src = "http://www.youtube.com/player_api"
-    else
-      tag.src = "//www.youtube.com/player_api"
+    tag.src = "https://www.youtube.com/player_api"
     firstScriptTag = document.getElementsByTagName('script')[0]
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag)
 
