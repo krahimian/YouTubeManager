@@ -1,7 +1,7 @@
 {
     "name": "youtubemanager2",
     "description": "YouTube player which mimics SoundManager2 Sound object",
-    "version": "0.5.1",
+    "version": "0.5.2",
     "main": "./lib/youtubemanager.js",
     "dependencies": {}
 }
