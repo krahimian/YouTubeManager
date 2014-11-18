@@ -146,6 +146,8 @@ class YoutubeSound
 
   destruct: ->
     this.player.destroy()
+    this._stopPlayingPoller()
+    this._stopLoadingPoller()
 
   load: ->
 
