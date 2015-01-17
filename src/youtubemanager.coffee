@@ -30,9 +30,9 @@ class YoutubeSound
     
     this.element = document.createElement 'div'
     this.element.setAttribute 'id', options.id
-    this.element.setAttribute 'class', 'ym-container'
-    
-    document.body.appendChild(this.element)
+
+    this.container = options.container || document.body
+    this.container.appendChild(this.element)
 
     # we don't want to change original options
     this._autoPlay = this.options.autoPlay
