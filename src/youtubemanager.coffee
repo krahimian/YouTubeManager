@@ -149,7 +149,9 @@ class YoutubeSound
     this._stopPlayingPoller()
     this._stopLoadingPoller()
 
-  load: ->
+  load: (url) ->
+    this.videoId = extractIdRe.exec(url)[1]
+    this.player.cueVideoById(this.videoId)
 
   clearOnPosition: (ms, method) ->
     ms = parseInt(ms, 10)
