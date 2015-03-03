@@ -55,6 +55,7 @@ class YoutubeSound
       width: options.width
       videoId: videoId
       events:
+        onError: => this.onError()
         onReady: => this.onReady()
         onStateChange: => this.onStateChange()
       playerVars:
