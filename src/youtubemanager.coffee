@@ -67,9 +67,11 @@ class YoutubeSound
 
   onReady: ->
     this.duration = this.durationEstimate = this.player.getDuration() * 1000
-    if this._autoPlay
-      this.play()
+
+    this.play() if this._autoPlay
+    this.setPosition this._autoPosition if this._autoPosition
     this.setVolume this.options.volume if this.options.volume?
+
     this._startLoadingPoller()
     this.readyState = 1
 
@@ -189,7 +191,7 @@ class YoutubeSound
   setPan: ->
 
   setPosition: (ms) ->
-    this.player.seekTo(ms / 1000)
+    if this.player.seekTo then this.player.seekTo(ms / 1000) else this._autoPosition = ms
 
   setVolume: (v) ->
     this.player.setVolume(v)
